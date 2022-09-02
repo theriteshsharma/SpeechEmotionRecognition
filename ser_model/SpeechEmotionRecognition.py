@@ -3,9 +3,6 @@ import librosa
 import soundfile
 import os, glob, pickle
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
 
 class SER:
     modelPath    = ""
@@ -37,11 +34,13 @@ class SER:
         with soundfile.SoundFile(file_name) as sound_file:
             X = sound_file.read(dtype="float32")
             sample_rate=sound_file.samplerate
+            sample_rate = 100
+            print(sample_rate)
             if chroma:
                 stft=np.abs(librosa.stft(X))
             result=np.array([])
             if mfcc:
-                mfccs=np.mean(librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=40).T, axis=0)
+                mfccs=np.mean(librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=8).T, axis=0)
                 result=np.hstack((result, mfccs))
             if chroma:
                 chroma=np.mean(librosa.feature.chroma_stft(S=stft, sr=sample_rate).T,axis=0)
@@ -58,8 +57,11 @@ class SER:
             emotion = self.model.predict(self.features.reshape(1,-1))
             return emotion
    
-
-
+upname = 'F:\\01 Code\\01 Projects\\SpeechEmotionRecognitionApp\\ser_model\\Notebooks\\audio.wav'
+ser = SER('F:\\01 Code\\01 Projects\\SpeechEmotionRecognitionApp\\ser_model\\model.pkl')
+ser.load_model()
+em = ser.find_emotion(upname)
+print(em[0])
 
 
 
