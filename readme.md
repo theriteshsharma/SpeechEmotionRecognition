@@ -1,4 +1,6 @@
 ### Speech Emotion Recognition
+Speech Emotion Recognition is an application through which we can predict the emotion of an audio using Machine learning and NLP
+### How to run
 ```python
  python venv .venv
  .\venv\scripts\activate
