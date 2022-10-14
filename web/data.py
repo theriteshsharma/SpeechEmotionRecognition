@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pickle
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-UPLOAD_FOLDER = '.\\uploads'
+UPLOAD_FOLDER = '.\\static\\img\\generated'
 
 class ser:
     def __init__(self,path):
@@ -18,6 +18,8 @@ class ser:
         plt.figure(figsize=(14,5))
         librosa.display.waveshow(self.audio,sr=self.sample_rate)
         plt.savefig(os.path.join(UPLOAD_FOLDER,self.file_name.split('.')[0]))
+        return os.path.join(UPLOAD_FOLDER,self.file_name.split('.')[0])[1:]+'.png'
+        
     
     def extract_feature(self):
         data , sample_rate  = self.audio,self.sample_rate
@@ -56,10 +58,65 @@ class ser:
         scaler = pickle.load(open('models\\std_scaler.sav','rb'))
         features = scaler.transform([features])
         result = {}
-        result['prediction'] = loaded_model.predict(features)
-        result['classes'] = loaded_model.classes_
-        result['probability'] = loaded_model.predict_proba(features)
+        result['prediction'] = loaded_model.predict(features)[0]
+        temp = {}
+        probability = loaded_model.predict_proba(features)
+        classes = list(loaded_model.classes_)
+        dict = {}
+        for idx,each in enumerate(classes):
+            dict[each] = format(probability[0][idx],'.4f')
+
+        probClass = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+        
+        result["probability"] = probClass
         return result
-s = ser('uploads\\03-01-05-02-02-01-12.wav')
-s.get_waveshow()
-print(s.svm_prediction())
+    def rf_prediction(self):
+        features = self.extract_feature()
+    
+        filename = 'models\\rf_model.sav'
+        loaded_model = pickle.load(open(filename, 'rb'))
+        scaler = pickle.load(open('models\\std_scaler.sav','rb'))
+        features = scaler.transform([features])
+        result = {}
+        result['prediction'] = loaded_model.predict(features)[0]
+        temp = {}
+        probability = loaded_model.predict_proba(features)
+        classes = list(loaded_model.classes_)
+        dict = {}
+        for idx,each in enumerate(classes):
+            dict[each] = format(probability[0][idx],'.4f')
+
+        probClass = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+        
+        result["probability"] = probClass
+        return result
+    def mlp_prediction(self):
+        features = self.extract_feature()
+    
+        filename = 'models\\mlp_model.sav'
+        loaded_model = pickle.load(open(filename, 'rb'))
+        scaler = pickle.load(open('models\\std_scaler.sav','rb'))
+        features = scaler.transform([features])
+        result = {}
+        result['prediction'] = loaded_model.predict(features)[0]
+        temp = {}
+        probability = loaded_model.predict_proba(features)
+        classes = list(loaded_model.classes_)
+        dict = {}
+        for idx,each in enumerate(classes):
+            dict[each] = format(probability[0][idx],'.4f')
+
+        probClass = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+        
+        result["probability"] = probClass
+        return result
+    def get_data(self):
+        result  = {}
+        result['sample_rate'] = "{:.3f}".format(self.sample_rate)
+        result['time_duration_per_sample'] =  "{:.9f}".format(1/self.sample_rate)
+        result['total_duration'] =  "{:.3f}".format((1/self.sample_rate)*len(self.audio))
+        return result
+
+# s = ser('uploads\\03-01-05-02-02-01-12.wav')
+# s.get_waveshow()
+# print(s.svm_prediction())

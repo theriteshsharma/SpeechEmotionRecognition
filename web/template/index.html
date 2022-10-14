@@ -18,9 +18,9 @@
     <nav>
         <h1>Speech Emotion Recognition</h1>
         <ul>
-            <li>Home</li>
+            <li><strong><a href="/">Home</a></strong></li>
             <li>Details</li>
-            <li>Team</li>
+            <li><a href="/team">Team</a></li>
         </ul>
     </nav>
     <form action="/" method="POST" enctype=multipart/form-data>
@@ -34,15 +34,28 @@
             <p>Duration &lt; 30s </p>
         </div>
     </form>
+
+    <div class="loader">
+        <div class="box1"></div>
+        <div class="box2"></div>
+        <div class="box3"></div>
+    </div>
 </body>
+
 </html>
 
 <script>
     const form = document.querySelector('form');
     const input  = document.querySelector('input');
-    input.onchange = () =>{
+    const loader = document.querySelector('.loader')
+     loader.style.display = 'none'
+    
+    input.onchange = async () =>{
         console.log("form Submited")
-        form.submit();
+        form.style.display = 'none'
+        loader.style.display = 'block'
+        await form.submit();
+        
     } 
     
 </script>

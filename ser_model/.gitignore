@@ -1,2 +1,5 @@
 venv/
 speech-emotion-recognition-ravdess-data/
+/Notebooks/Ravdess/
+/web/static/audio/*
+/web/static/img/generated/*

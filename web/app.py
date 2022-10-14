@@ -5,8 +5,9 @@ from werkzeug.utils import secure_filename
 import logging
 import librosa
 import numpy as np
+from data import ser
 
-UPLOAD_FOLDER = '.\\uploads'
+UPLOAD_FOLDER = '.\\static\\audio'
 ALLOWED_EXTENSIONS = {'wav','mp3'}
 FILE_SIZE = 50
 
@@ -53,11 +54,26 @@ def handle_file_upload():
             file.save(file_path)
             features = feature_extraction(file_path)
             app.logger.info(features)
-
-
-        return render_template('result.html')
+            s = ser(file_path)
+            result = {}
+            result['wave_path'] = s.get_waveshow()
+            result['svm'] = s.svm_prediction()
+            result['rf'] = s.rf_prediction()
+            result['mlp'] = s.mlp_prediction()
+            result['data'] = s.get_data()
+            result['audio_path'] =  file_path[1:]
+            app.logger.info(result)
+        return render_template('result.html',value=result)
     if request.method == 'GET':
        return render_template('index.html')
+@app.route('/result',methods=['GET'])
+def handle_result_page():
+    if request.method == 'GET':
+        return render_template('result.html')
 
+@app.route('/team',methods=['GET'])
+def handle_team():
+    if request.method == 'GET':
+        return render_template('team.html')
 if __name__ == "__main__":
     app.run(debug=True)
