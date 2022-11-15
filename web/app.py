@@ -8,7 +8,7 @@ import numpy as np
 from data import ser
 
 UPLOAD_FOLDER = '.\\static\\audio'
-ALLOWED_EXTENSIONS = {'wav','mp3'}
+ALLOWED_EXTENSIONS = {'wav'}
 FILE_SIZE = 50
 
 def feature_extraction(file_path):
@@ -76,4 +76,4 @@ def handle_team():
     if request.method == 'GET':
         return render_template('team.html')
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host="192.168.1.39",port=80)
