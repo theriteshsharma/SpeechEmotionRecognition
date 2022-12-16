@@ -76,4 +76,4 @@ def handle_team():
     if request.method == 'GET':
         return render_template('team.html')
 if __name__ == "__main__":
-    app.run(debug=True,host="192.168.1.39",port=80)
+    app.run(debug=True,host="localhost",port=80)
