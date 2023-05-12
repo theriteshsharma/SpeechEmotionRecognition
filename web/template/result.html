@@ -1,76 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Speech Emotion Recognition</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,500;0,700;1,100;1,400&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,500;0,700;1,100;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <nav>
-        <h1>Speech Emotion Recognition</h1>
-        <ul>
-            <li><a href="/">Home</a></li>
-            
-            <li><a href="/team">Team</a></li>
-        </ul>
+      <h1>Speech Emotion Recognition</h1>
+      <ul>
+        <li><a href="/">Home</a></li>
+
+        <li><a href="/team">Team</a></li>
+      </ul>
     </nav>
     <main>
-       
-        <div class="emotion">
-           {{value.mlp.prediction}}
+      <div class="emotion">{{value.mlp.prediction}}</div>
+      <audio controls>
+        <source src="{{value.audio_path}}" type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+
+      <h2>Prediction</h2>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-head">SVM</div>
+            <div class="card-body">
+              <ul id="svm">
+                {% for key in value.svm.probability %}
+                <li>{{key[0]}}<span>{{key[1]}}%</span></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
         </div>
-        <audio controls>
-            
-            <source src="{{value.audio_path}}" type="audio/wav">
-          Your browser does not support the audio element.
-          </audio>
-       
-        
-        <h2>Prediction</h2>
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-head">SVM</div>
-                    <div class="card-body">
-                        <ul id='svm'>                         
-                           
-                            {% for key in value.svm.probability %}
-                            <li>{{key[0]}}<span>{{key[1]}}%</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-head">Random Forest</div>
+            <div class="card-body">
+              <ul>
+                {% for key in value.rf.probability %}
+                <li>{{key[0]}}<span>{{key[1]}}%</span></li>
+                {% endfor %}
+              </ul>
             </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-head">Random Forest</div>
-                    <div class="card-body">
-                        <ul>
-                            {% for key in value.rf.probability %}
-                            <li>{{key[0]}}<span>{{key[1]}}%</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-head">MLP</div>
+            <div class="card-body">
+              <ul>
+                {% for key in value.mlp.probability %}
+                <li>{{key[0]}}<span>{{key[1]}}%</span></li>
+                {% endfor %}
+              </ul>
             </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-head">MLP</div>
-                    <div class="card-body">
-                        <ul>
-                            {% for key in value.mlp.probability %}
-                            <li>{{key[0]}}<span>{{key[1]}}%</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="col">
+          </div>
+        </div>
+        <!-- <div class="col">
                 <div class="card">
                     <div class="card-head">SVM</div>
                     <div class="card-body">
@@ -83,24 +80,30 @@
                     </div>
                 </div>
             </div> -->
-        </div>
-        <!-- <h2>Summary</h2>
+      </div>
+      <!-- <h2>Summary</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis ligula nibh. Nullam et purus in tellus congue viverra. Vestibulum mollis odio eget elit pharetra, vitae porta sapien vehicula. Donec auctor semper orci a tincidunt. Sed scelerisque rutrum nisl vel congue. Fusce ultricies, erat posuere pharetra dignissim, sem odio maximus sapien, eu sollicitudin sem ex a justo. Curabitur sit amet nisi vel ante porttitor commodo at fringilla turpis. Suspendisse potenti. Sed sagittis hendrerit sodales.
 
             Vivamus enim sem, scelerisque id leo vitae, iaculis rutrum odio. Nulla enim nisl, fermentum vitae arcu ac, accumsan euismod est. Etiam sit amet ultrices ante. Sed.</p>
          -->
-        <h2>Details</h2>
-        <ul>
-            <li><strong>Sample Rate:</strong> &nbsp; {{value.data.sample_rate}}</li>
-            <li><strong>Sample Duration:</strong> &nbsp; {{value.data.time_duration_per_sample}}s</li>
-            <li><strong>Total Duration :</strong> &nbsp; {{value.data.total_duration}}s</li>
-        </ul>
-        <!-- <ul>
+      <h2>Details</h2>
+      <ul>
+        <li><strong>Sample Rate:</strong> &nbsp; {{value.data.sample_rate}}</li>
+        <li>
+          <strong>Sample Duration:</strong> &nbsp;
+          {{value.data.time_duration_per_sample}}s
+        </li>
+        <li>
+          <strong>Total Duration :</strong> &nbsp;
+          {{value.data.total_duration}}s
+        </li>
+      </ul>
+      <!-- <ul>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
         </ul> -->
-        <!-- <h2>Features</h2>
+      <!-- <h2>Features</h2>
         <ul>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
@@ -111,13 +114,11 @@
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
             <li><strong>Sample Rate:</strong> &nbsp; value</li>
         </ul> -->
-        <h2>Waves</h2>
-        <img src="{{value.wave_path}}" alt="" srcset="">
-        <!-- <h2>Graphs</h2>
+      <h2>Waves</h2>
+      <img src="{{value.wave_path}}" alt="" srcset="" />
+      <!-- <h2>Graphs</h2>
         <h2>Waveforms</h2> -->
-
-
     </main>
-</body>
-<script src="/static/script.js"></script>
-</html> 
+  </body>
+  <script src="/static/script.js"></script>
+</html>
